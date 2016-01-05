@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+*.sw?
+node_modules
+dist
+lib
+coverage
+_book
