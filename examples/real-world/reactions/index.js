@@ -86,6 +86,18 @@ function fetchPaginatedData(id, paginations, actionCreator) {
 }
 
 export function reactions(state) {
+    var x = _(state.router.components)
+        .map('reactions')
+        .filter() // remove components that don't have a reactions function.
+        .transform((t) => {console.log("X", t);t(state)})
+        .flatten()
+        .value();
+    console.log(x);
+
+    return [];
+}
+
+function old() {
     var {login, name} = state.router.params;
     var repo = (login && name) ? `${login}/${name}` : undefined;
     return [

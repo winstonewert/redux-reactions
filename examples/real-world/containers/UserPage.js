@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
+import connect from './connect'
+import {dataReactions, fetchUser, fetchStarred} from '../reactions/data'
 import { fetchMoreStarred } from '../actions'
 import User from '../components/User'
 import Repo from '../components/Repo'
@@ -75,6 +76,16 @@ function mapStateToProps(state) {
   }
 }
 
+function reactions(state) {
+  const { login } = state.router.params
+  const {
+    pagination: { starredByUser },
+    entities: { users, repos }
+  } = state
+  console.log("Hello"); 
+  return dataReactions(login, entities, pagination, ['name'], fetchUser, fetchStarred); 
+}
+
 export default connect(mapStateToProps, {
   fetchMoreStarred
-})(UserPage)
+}, reactions)(UserPage)
