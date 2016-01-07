@@ -1,7 +1,7 @@
 import { Schema, arrayOf, normalize } from 'normalizr'
 import { camelizeKeys } from 'humps'
 import 'isomorphic-fetch'
-import {fromPromiseFactory} from '../../../lib'
+import { fromPromiseFactory } from '../../../lib'
 
 // Extracts the next page URL from Github API response.
 function getNextPageUrl(response) {
@@ -78,7 +78,7 @@ export const CALL_API = Symbol('Call API')
 // Performs the call and promises when such actions are dispatched.
 export default fromPromiseFactory((reaction) => {
   let { endpoint } = reaction 
-  const { schema, types } = reaction 
+  const { schema } = reaction 
 
   if (typeof endpoint !== 'string') {
     throw new Error('Specify a string endpoint URL.')

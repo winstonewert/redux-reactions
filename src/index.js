@@ -29,11 +29,11 @@ export function fromEmitter(emitter) {
 
       function emit(eventType, ...args) {
         if(!cancelled) {
-              var actionCreator = events[eventType]
-              if (actionCreator) {
-                dispatch(actionCreator(...args))
-              }
-            }
+          var actionCreator = events[eventType]
+          if (actionCreator) {
+            dispatch(actionCreator(...args))
+          }
+        }
       }
       var stripped = _.omit(reaction, 'events')
 
@@ -43,11 +43,11 @@ export function fromEmitter(emitter) {
         reaction: stripped,
         replaceEvents: (events_) => {events = events_},
         cancel: () => {
-              if (cancel) {
-                  cancel()
-                }
-              cancelled = true
-            }
+          if (cancel) {
+            cancel()
+          }
+          cancelled = true
+        }
       }
     }
 
@@ -77,8 +77,8 @@ export function fromEmitter(emitter) {
 
 export function fromPromiseFactory(promiseFactory) {
   return fromEmitter((reaction, emit) => {
-      promiseFactory(reaction)
+    promiseFactory(reaction)
            .then((result) => emit('resolved', result))
            .catch((error) => emit('rejected', error))
-    })
+  })
 }

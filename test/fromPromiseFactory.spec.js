@@ -8,8 +8,8 @@ describe('fromPromiseFactory', () => {
 
   function promiseFactory(reaction) {
     return new Promise(function (resolve, reject) {
-        promises.push({ reaction, resolve, reject })
-      })
+      promises.push({ reaction, resolve, reject })
+    })
   }
 
   beforeEach(() => {

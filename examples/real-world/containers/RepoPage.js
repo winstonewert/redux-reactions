@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import connect from './connect'
 import { fetchMoreStargazers } from '../actions'
+import { dataReactions, fetchRepo, fetchStargazers } from '../reactions/data'
 import Repo from '../components/Repo'
 import User from '../components/User'
 import List from '../components/List'
@@ -77,8 +78,15 @@ function mapStateToProps(state) {
 }
 
 function reactions(state) {
-    console.log(state);
-    return [];
+  const { login, name } = state.router.params
+  const fullName = `${login}/${name}`
+  return dataReactions(
+      fullName,
+      state.entities.repos,
+      state.pagination.stargazersByRepo,
+      [ 'description' ],
+      fetchRepo,
+      fetchStargazers) 
 }
 
 export default connect(mapStateToProps, {

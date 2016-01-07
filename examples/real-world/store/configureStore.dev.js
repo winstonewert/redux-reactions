@@ -5,8 +5,8 @@ import createHistory from 'history/lib/createBrowserHistory'
 import routes from '../routes'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
-import {startReactions} from '../../../lib'
-import {reactions, REACTION_TYPES} from '../reactions'
+import { startReactions } from '../../../lib'
+import { reactions, REACTION_TYPES } from '../reactions'
 
 const finalCreateStore = compose(
   reduxReactRouter({ routes, createHistory }),
@@ -25,7 +25,7 @@ export default function configureStore(initialState) {
     })
   }
 
-  startReactions(store, reactions, REACTION_TYPES);
+  startReactions(store, reactions, REACTION_TYPES)
 
   return store
 }
