@@ -3,14 +3,16 @@ import { reduxReactRouter } from 'redux-router'
 import createHistory from 'history/lib/createBrowserHistory'
 import routes from '../routes'
 import thunk from 'redux-thunk'
-import api from '../middleware/api'
 import rootReducer from '../reducers'
+import { startReactions } from '../../../lib'
+import { reactions, REACTION_TYPES } from '../reactions'
 
 const finalCreateStore = compose(
-  applyMiddleware(thunk, api),
   reduxReactRouter({ routes, createHistory })
 )(createStore)
 
 export default function configureStore(initialState) {
-  return finalCreateStore(rootReducer, initialState)
+  const store = finalCreateStore(rootReducer, initialState)
+  startReactions(store, reactions, REACTION_TYPES)
+  return store
 }
