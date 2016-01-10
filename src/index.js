@@ -6,22 +6,22 @@ export function startReactions(store, reactions, taskTypes) {
 
   function updateReactions() {
     var reactionsByType = _.groupBy(_.filter(reactions(store.getState())), 'type')
-    for (var type in reactionsByType) {
-      currentReactionState[type] = taskTypes[type](currentReactionState[type], reactionsByType[type], store.dispatch)
+    for (var type in taskTypes) {
+      currentReactionState[type] = taskTypes[type](currentReactionState[type], reactionsByType[type] || [], store.dispatch)
     }
   }
 
   store.subscribe(updateReactions)
 }
 
-function matchesReaction(reaction) {
-  var strippedReaction = _.omit(reaction, 'events')
-  return function (other) {
-    return _.isEqual(strippedReaction, other.reaction)
-  }
-}
-
 export function fromEmitter(emitter) {
+    function matchesReaction(reaction) {
+      var strippedReaction = _.omit(reaction, 'events')
+      return function (other) {
+        return _.isEqual(strippedReaction, other.reaction)
+      }
+    }
+
   return function emitterWrapper(oldReactions = [], reactions, dispatch) {
     function createReaction(reaction) {
       var cancelled = false
@@ -54,12 +54,11 @@ export function fromEmitter(emitter) {
     var newReactions = []
 
     for (var reaction of reactions) {
-      var existingReactions = _.remove(oldReactions, matchesReaction(reaction))
-      if (existingReactions.length) {
-        for (var existingReaction of existingReactions) {
+      var existingIndex = _.findIndex(oldReactions, matchesReaction(reaction));
+      if (existingIndex !== -1) {
+          var existingReaction = oldReactions.splice(existingIndex, 1)[0];
           existingReaction.replaceEvents(reaction.events)
           newReactions.push(existingReaction)
-        }
       } else {
         newReactions.push(createReaction(reaction))
       }

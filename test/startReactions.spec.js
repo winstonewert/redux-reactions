@@ -132,6 +132,12 @@ describe('startReactions', () => {
       deepEqual({ local: 'Hello World', remote: 'Hello World', error: null }, store.getState())
     })
 
+    it('cancels correctly if change our mind, and dont want a change', () => {
+      store.dispatch({ type: 'USER_SET', text: 'Hello' })
+      store.dispatch({ type: 'USER_SET', text: '' })
+      strictEqual(serverRequests['Hello'].cancelled, true)
+    });
+
 
   })
 })
