@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import connect from './connect'
+import connectWithReactions from './connect'
 import { dataReactions, fetchUser, fetchStarred } from '../reactions/data'
 import { fetchMoreStarred } from '../actions'
 import User from '../components/User'
@@ -86,6 +86,6 @@ function reactions(state) {
       fetchStarred) 
 }
 
-export default connect(mapStateToProps, {
+export default connectWithReactions(mapStateToProps, {
   fetchMoreStarred
 }, reactions)(UserPage)

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import connect from './connect'
+import connectWithReactions from './connectWithReactions'
 import { fetchMoreStargazers } from '../actions'
 import { dataReactions, fetchRepo, fetchStargazers } from '../reactions/data'
 import Repo from '../components/Repo'
@@ -89,6 +89,6 @@ function reactions(state) {
       fetchStargazers) 
 }
 
-export default connect(mapStateToProps, {
+export default connectWithReactions(mapStateToProps, {
   fetchMoreStargazers
 }, reactions)(RepoPage)
