@@ -153,35 +153,35 @@ describe('fromEmitter', () => {
   })
 
   it('identical actions are combined', () => {
-      const reaction = {'foobar': 42};
-      var result = reactor(undefined, [reaction, reaction], dispatch);
+    const reaction = { 'foobar': 42 }
+    reactor(undefined, [ reaction, reaction ], dispatch)
 
-      strictEqual(emitter.callCount, 1);
-      strictEqual(dispatch.callCount, 0);
+    strictEqual(emitter.callCount, 1)
+    strictEqual(dispatch.callCount, 0)
 
-  });
+  })
 
   it('identical actions combined in iteration', () => {
-      const reaction = {'foobar': 42};
-      var result = reactor(undefined, [reaction, reaction], dispatch);
-      result = reactor(result, [reaction, reaction], dispatch)
+    const reaction = { 'foobar': 42 }
+    var result = reactor(undefined, [ reaction, reaction ], dispatch)
+    result = reactor(result, [ reaction, reaction ], dispatch)
 
-      strictEqual(emitter.callCount, 1);
-      strictEqual(dispatch.callCount, 0);
-  });
+    strictEqual(emitter.callCount, 1)
+    strictEqual(dispatch.callCount, 0)
+  })
 
   it('identical actions, both dispatched', () => {
-      const reaction = {'foobar': 42, events: {go: () => 1}};
-      const reaction2 = {'foobar': 42, events: {go: () => 2}};
-      var result = reactor(undefined, [reaction, reaction2], dispatch);
-      result = reactor(result, [reaction, reaction2], dispatch)
+    const reaction = { 'foobar': 42, events: { go: () => 1 } }
+    const reaction2 = { 'foobar': 42, events: { go: () => 2 } }
+    var result = reactor(undefined, [ reaction, reaction2 ], dispatch)
+    result = reactor(result, [ reaction, reaction2 ], dispatch)
 
-      strictEqual(emitter.callCount, 1);
-      strictEqual(dispatch.callCount, 0);
+    strictEqual(emitter.callCount, 1)
+    strictEqual(dispatch.callCount, 0)
 
-      emitter.args[0][1]('go');
-      deepEqual(dispatch.args, [[1],[2]]);
+    emitter.args[0][1]('go')
+    deepEqual(dispatch.args, [ [ 1 ],[ 2 ] ])
       
-  });
+  })
 
 })

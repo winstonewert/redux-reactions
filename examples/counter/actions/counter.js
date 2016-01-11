@@ -24,14 +24,14 @@ export function incrementIfOdd() {
 }
 
 export function incrementAsync(delay = 1000) {
-    return {
-        type: INCREMENT_ASYNC,
-        delay
-    }
+  return {
+    type: INCREMENT_ASYNC,
+    delay
+  }
 }
 
 export function incrementAsyncEnd() {
-    return {
-        type: INCREMENT_ASYNC_END
-    }
+  return {
+    type: INCREMENT_ASYNC_END
+  }
 }

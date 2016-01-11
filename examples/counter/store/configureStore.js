@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import reducer from '../reducers'
 import { startReactions } from '../../../lib'
-import { reactions, REACTORS} from '../reactions'
+import { reactions, REACTORS } from '../reactions'
 
 const createStoreWithMiddleware = applyMiddleware(
   thunk

@@ -136,7 +136,7 @@ describe('startReactions', () => {
       store.dispatch({ type: 'USER_SET', text: 'Hello' })
       store.dispatch({ type: 'USER_SET', text: '' })
       strictEqual(serverRequests['Hello'].cancelled, true)
-    });
+    })
 
 
   })

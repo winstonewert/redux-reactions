@@ -12,28 +12,29 @@ export function startReactions(store, reactions, taskTypes) {
   }
 
   store.subscribe(updateReactions)
+  updateReactions()
 }
 
 export function fromEmitter(emitter) {
-    function matchesReaction(reaction) {
-      var strippedReaction = _.omit(reaction, 'events')
-      return function (other) {
-        return _.isEqual(strippedReaction, other.reaction)
-      }
+  function matchesReaction(reaction) {
+    var strippedReaction = _.omit(reaction, 'events')
+    return function (other) {
+      return _.isEqual(strippedReaction, other.reaction)
     }
+  }
 
   return function emitterWrapper(oldReactions = [], reactions, dispatch) {
     function createReaction(reaction) {
       var cancelled = false
-      var events = [reaction.events]
+      var events = [ reaction.events ]
 
       function emit(eventType, ...args) {
         if(!cancelled) {
           for (var event_ of events) {
-              var actionCreator = event_[eventType]
-              if (actionCreator) {
-                dispatch(actionCreator(...args))
-              }
+            var actionCreator = event_[eventType]
+            if (actionCreator) {
+              dispatch(actionCreator(...args))
+            }
           }
         }
       }
@@ -57,19 +58,19 @@ export function fromEmitter(emitter) {
     var newReactions = []
 
     for (var reaction of reactions) {
-      var oldReactionIndex = _.findIndex(oldReactions, matchesReaction(reaction));
+      var oldReactionIndex = _.findIndex(oldReactions, matchesReaction(reaction))
       if (oldReactionIndex !== -1) {
-          var existingReaction = oldReactions.splice(oldReactionIndex, 1)[0];
-          existingReaction.clearEvents()
-          existingReaction.addEvents(reaction.events)
-          newReactions.push(existingReaction)
+        var existingReaction = oldReactions.splice(oldReactionIndex, 1)[0]
+        existingReaction.clearEvents()
+        existingReaction.addEvents(reaction.events)
+        newReactions.push(existingReaction)
       } else {
-        var newReactionIndex = _.findIndex(newReactions, matchesReaction(reaction));
+        var newReactionIndex = _.findIndex(newReactions, matchesReaction(reaction))
         if (newReactionIndex !== -1) {
             // An identical reaction has alread been started
-            newReactions[newReactionIndex].addEvents(reaction.events)
+          newReactions[newReactionIndex].addEvents(reaction.events)
         } else {
-            newReactions.push(createReaction(reaction))
+          newReactions.push(createReaction(reaction))
         }
       }
     }
