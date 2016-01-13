@@ -1,30 +1,52 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import { increment, decrement } from '../counter'
+import _ from 'lodash'
 
-class Counter extends Component {
-  render() {
-    const { increment, incrementIfOdd, incrementAsync, decrement, counter } = this.props
-    return (
-      <p>
+function BasicCounter({ counter, dispatch }) {
+  return (<span>
         Clicked: {counter} times
         {' '}
-        <button onClick={increment}>+</button>
+        <button onClick={() => dispatch(increment())}>+</button>
         {' '}
-        <button onClick={decrement}>-</button>
+        <button onClick={() => dispatch(decrement())}>-</button>
+    </span>)
+}
+
+import { always, ifOdd } from '../ifOdd'
+
+function CounterWithIfOdd({ counter, dispatch }) {
+  return (<span>
+        <BasicCounter counter={counter} dispatch={(action) => dispatch(always(action))}/>
         {' '}
-        <button onClick={incrementIfOdd}>Increment if odd</button>
+        <button onClick={() => dispatch(ifOdd(increment()))}>Increment if odd</button>
+    </span>)
+}
+
+import { now, later } from '../delayed'
+
+function Counter({ counter, dispatch }) {
+  return (
+      <span>
+        <CounterWithIfOdd counter={counter.state} dispatch={(action) => dispatch(now(action))}/>
         {' '}
-        <button onClick={() => incrementAsync()}>Increment async</button>
-      </p>
+        <button onClick={() => dispatch(later(always(increment())))}>Increment async</button>
+      </span>
     )
+}
+
+import { item, add, remove } from '../list'
+
+class CounterList extends Component {
+  render() {
+    const { counters, dispatch } = this.props
+    return (<div>
+        {_.map(counters, (counter, index) => <p key={index}>
+                <Counter counter={counter} dispatch={(action) => dispatch(item(index, action))}/>
+                <button onClick={() => dispatch(remove(index))}>Remove Counter</button>
+          </p>)}
+        <button onClick={() => dispatch(add())}>Add Counter</button>
+    </div>)
   }
 }
 
-Counter.propTypes = {
-  increment: PropTypes.func.isRequired,
-  incrementIfOdd: PropTypes.func.isRequired,
-  incrementAsync: PropTypes.func.isRequired,
-  decrement: PropTypes.func.isRequired,
-  counter: PropTypes.number.isRequired
-}
-
-export default Counter
+export default CounterList
