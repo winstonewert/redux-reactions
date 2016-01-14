@@ -1,10 +1,8 @@
 import { connect } from 'react-redux'
-import Counter from '../components/Counter'
+import config from '../config'
 
 function mapStateToProps(state) {
-  return {
-    counters: state
-  }
+  return { state }
 }
 
-export default connect(mapStateToProps)(Counter)
+export default connect(mapStateToProps)(config.view)

@@ -1,7 +1,7 @@
-import { counterReducer } from './counter'
-import { ifOddReducer } from './ifOdd'
+import config from './config'
+
 import { delayedReducer } from './delayed'
 import { listReducer } from './list'
 
-const reducer = listReducer(delayedReducer(ifOddReducer(counterReducer)))
+const reducer = config.reducer
 export default reducer

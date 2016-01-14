@@ -1,19 +1,14 @@
+import React, { Component } from 'react'
+
 const INCREMENT = 'INCREMENT'
 const DECREMENT = 'DECREMENT'
 
-export function increment() {
-  return {
-    type: INCREMENT
-  }
+export const actions = {
+  increment: () => ({ type: INCREMENT }),
+  decrement: () => ({ type: DECREMENT })
 }
 
-export function decrement() {
-  return {
-    type: DECREMENT
-  }
-}
-
-export function counterReducer(state = 0, action) {
+export function reducer(state = 0, action) {
   switch (action.type) {
     case INCREMENT:
       return state + 1
@@ -23,3 +18,15 @@ export function counterReducer(state = 0, action) {
       return state
   }
 }
+
+export function View({ state, dispatch }) {
+  return (<span>
+        Clicked: {state} times
+        {' '}
+        <button onClick={() => dispatch(actions.increment())}>+</button>
+        {' '}
+        <button onClick={() => dispatch(actions.decrement())}>-</button>
+    </span>)
+}
+
+export default { actions, reducer, View }

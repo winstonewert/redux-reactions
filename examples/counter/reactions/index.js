@@ -1,9 +1,8 @@
 import { fromEmitter } from '../../../lib'
-import { delayedReactions } from '../delayed'
-import { listReactions } from '../list'
+import config from '../config'
 
 export function reactions(state) {
-  return listReactions(delayedReactions)(state) 
+  return config.reactions(state) 
 }
 
 export const REACTORS = {

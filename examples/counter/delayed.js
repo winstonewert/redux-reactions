@@ -1,41 +1,13 @@
+import React, { Component } from 'react'
 import _ from 'lodash'
 _.mixin(require('lodash-deep'))
 const LATER = 'later'
 const NOW = 'now'
 const LATER_FINISHED = 'later_finished'
 
-export function later(action) {
-  return {
-    type: LATER,
-    action
-  }
-}
-
-export function now(action) {
-  return {
-    type: NOW,
-    action
-  }
-}
-
-export function delayedReducer(reducer) {
-  const default_state = {
-    pending: [],
-    state: reducer(undefined, {})
-  }
-  return (state = default_state, action) => {
-    switch( action.type) {
-      case LATER:
-        return { ...state, pending: [ ...state.pending, action.action ] }
-      case LATER_FINISHED:
-        var index = _.deepFindIndex(state.pending, action.action)
-        return { state: reducer(state.state, action.action), pending: [].concat(state.pending.slice(0, index), state.pending.slice(index+1)) }
-      case NOW:
-        return { ...state, state: reducer(state.state, action.action) }
-      default:
-        return state 
-    }   
-  }
+export const actions = {
+  later: (action) => ({ type: LATER, action }),
+  now: (action) => ({ type: NOW, action }),
 }
 
 function delayedAction(action) {
@@ -48,6 +20,38 @@ function delayedAction(action) {
   }
 }
 
-export function delayedReactions(state) {
-  return _.map(state.pending, delayedAction)
+
+
+export default function (inner) {
+  const default_state = {
+    pending: [],
+    state: inner.reducer(undefined, {})
+  }
+ 
+  return {
+    actions: actions,
+    reducer: (state = default_state, action) => {
+      switch( action.type) {
+        case LATER:
+          return { ...state, pending: [ ...state.pending, action.action ] }
+        case LATER_FINISHED:
+          var index = _.deepFindIndex(state.pending, action.action)
+          return { state: inner.reducer(state.state, action.action), pending: [].concat(state.pending.slice(0, index), state.pending.slice(index+1)) }
+        case NOW:
+          return { ...state, state: inner.reducer(state.state, action.action) }
+        default:
+          return state 
+      }   
+    },
+    reactions: (state) =>  _.map(state.pending, delayedAction),
+    view: ({ state, dispatch }) => (
+            <span>
+                <inner.view state={state.state} dispatch={(action) => dispatch(actions.now(action))}/>
+                {' '}
+                <button onClick={() => dispatch(actions.later(inner.actions.increment()))}>Increment async</button>
+              </span>
+        )
+  }
 }
+
+
