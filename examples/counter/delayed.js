@@ -10,12 +10,12 @@ export const actions = {
   now: (action) => ({ type: NOW, action })
 }
 
-function delayedAction(action) {
+function delayedAction(action, dispatch) {
   return {
     type: 'DELAYED',
     delay: 1000,
     events: {
-      go: () => ({ type: LATER_FINISHED, action })
+      go: () => dispatch({ type: LATER_FINISHED, action })
     }
   }
 }
@@ -41,7 +41,7 @@ export default function (inner) {
           return state 
       }   
     },
-    reactions: (state) =>  _.map(state.pending, delayedAction),
+    reactions: (state, dispatch) =>  _.map(state.pending, (action) => delayedAction(action, dispatch)),
     view: ({ state, dispatch }) => (
             <span>
                 <inner.view state={state.state} dispatch={(action) => dispatch(actions.now(action))}/>

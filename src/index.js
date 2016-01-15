@@ -5,9 +5,9 @@ export function startReactions(store, reactions, taskTypes) {
   var currentReactionState = {}
 
   function updateReactions() {
-    var reactionsByType = _.groupBy(_.filter(reactions(store.getState())), 'type')
+    var reactionsByType = _.groupBy(_.filter(reactions(store.getState(), store.dispatch)), 'type')
     for (var type in taskTypes) {
-      currentReactionState[type] = taskTypes[type](currentReactionState[type], reactionsByType[type] || [], store.dispatch)
+      currentReactionState[type] = taskTypes[type](currentReactionState[type], reactionsByType[type] || [])
     }
   }
 
@@ -23,7 +23,7 @@ export function fromEmitter(emitter) {
     }
   }
 
-  return function emitterWrapper(oldReactions = [], reactions, dispatch) {
+  return function emitterWrapper(oldReactions = [], reactions) {
     function createReaction(reaction) {
       var cancelled = false
       var events = [ reaction.events ]
@@ -33,7 +33,7 @@ export function fromEmitter(emitter) {
           for (var event_ of events) {
             var actionCreator = event_[eventType]
             if (actionCreator) {
-              dispatch(actionCreator(...args))
+              actionCreator(...args)
             }
           }
         }

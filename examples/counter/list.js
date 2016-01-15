@@ -29,13 +29,7 @@ export default function (inner) {
           return state
       }
     },
-    reactions: (state) =>  {
-      function reactionsWithIndex(state, index) {
-        return _.map(inner.reactions(state), (reaction) => ({ ...reaction, events: _.mapValues(reaction.events, (actionCreator) => (...args) => actions.item(index, actionCreator(...args))) }))
-      }
-      var result = _.flatten(_.map(state, reactionsWithIndex))
-      return result
-    },
+    reactions: (state, dispatch) => _.flatten(_.map(state, (state, index) => inner.reactions(state, (action) => dispatch(actions.item(index, action))))),
     view: ({ state, dispatch }) => (
         <div>
             {_.map(state, (counter, index) => <p key={index}>
