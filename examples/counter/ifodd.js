@@ -10,10 +10,10 @@ export const actions = {
 }
 
 export default function (inner) {
-  const default_state = inner.reducer(undefined, {})
   return {
+    initial: inner.initial,
     actions: { ...actions, ..._.mapValues(inner.actions, (actionCreator) => (...args) => actions.always(actionCreator(...args))) },
-    reducer: (state = default_state, action) => {
+    reducer: (state, action) => {
       switch (action.type) {
         case IF_ODD:
           if (state % 2 == 0) {
@@ -28,9 +28,9 @@ export default function (inner) {
           return state
       }
     },
-    view: ({ state, dispatch }) => (
+    view: ({ state, dispatch, ...props }) => (
             <span>
-                <inner.view state={state} dispatch={(action) => dispatch(actions.always(action))}/>
+                <inner.view state={state} dispatch={(action) => dispatch(actions.always(action))} {...props}/>
                 {' '}
                 <button onClick={() => dispatch(actions.ifOdd(inner.actions.increment()))}>Increment if odd</button>
             </span>

@@ -3,12 +3,14 @@ import React from 'react'
 const INCREMENT = 'INCREMENT'
 const DECREMENT = 'DECREMENT'
 
-export const actions = {
+const initial = 0;
+
+const actions = {
   increment: () => ({ type: INCREMENT }),
   decrement: () => ({ type: DECREMENT })
 }
 
-export function reducer(state = 0, action) {
+function reducer(state, action) {
   switch (action.type) {
     case INCREMENT:
       return state + 1
@@ -19,7 +21,7 @@ export function reducer(state = 0, action) {
   }
 }
 
-export function view({ state, dispatch }) {
+function view({ state, dispatch }) {
   return (<span>
         Clicked: {state} times
         {' '}
@@ -29,4 +31,4 @@ export function view({ state, dispatch }) {
     </span>)
 }
 
-export default { actions, reducer, view }
+export default { initial, actions, reducer, view }

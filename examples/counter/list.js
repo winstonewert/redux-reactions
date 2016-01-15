@@ -12,17 +12,15 @@ const actions = {
 }
 
 export default function (inner) {
-
-  const default_state = [ inner.reducer(undefined, {}) ]
-
   return {
+    initial: [inner.initial],
     action: actions,
-    reducer: (state = default_state, action) => {
+    reducer: (state, action) => {
       switch(action.type) {
         case ITEM:
           return _.map(state, (old, index) => index == action.index ? inner.reducer(old, action.action) : old)
         case ADD:
-          return [ ...state, inner.reducer(undefined, {}) ]
+          return [ ...state, inner.initial]
         case REMOVE:
           return _.filter(state, (_, index) => index != action.index)
         default:
@@ -33,7 +31,7 @@ export default function (inner) {
     view: ({ state, dispatch }) => (
         <div>
             {_.map(state, (counter, index) => <p key={index}>
-                <inner.view state={counter} dispatch={(action) => dispatch(actions.item(index, action))}/>
+                <inner.view state={counter} dispatch={(action) => dispatch(actions.item(index, action))} remove={() => dispatch(actions.remove(index))} />
                 <button onClick={() => dispatch(actions.remove(index))}>Remove Counter</button>
               </p>)}
             <button onClick={() => dispatch(actions.add())}>Add Counter</button>

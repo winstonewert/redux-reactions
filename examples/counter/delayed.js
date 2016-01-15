@@ -21,14 +21,13 @@ function delayedAction(action, dispatch) {
 }
 
 export default function (inner) {
-  const default_state = {
-    pending: [],
-    state: inner.reducer(undefined, {})
-  }
- 
   return {
+    initial: {
+        pending: [],
+        state: inner.initial
+    },
     actions: actions,
-    reducer: (state = default_state, action) => {
+    reducer: (state, action) => {
       switch( action.type) {
         case LATER:
           return { ...state, pending: [ ...state.pending, action.action ] }
@@ -42,7 +41,7 @@ export default function (inner) {
       }   
     },
     reactions: (state, dispatch) =>  _.map(state.pending, (action) => delayedAction(action, dispatch)),
-    view: ({ state, dispatch }) => (
+    view: ({ state, dispatch}) => (
             <span>
                 <inner.view state={state.state} dispatch={(action) => dispatch(actions.now(action))}/>
                 {' '}
