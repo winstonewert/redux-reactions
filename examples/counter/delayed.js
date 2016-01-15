@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import _ from 'lodash'
 _.mixin(require('lodash-deep'))
 const LATER = 'later'
@@ -7,7 +7,7 @@ const LATER_FINISHED = 'later_finished'
 
 export const actions = {
   later: (action) => ({ type: LATER, action }),
-  now: (action) => ({ type: NOW, action }),
+  now: (action) => ({ type: NOW, action })
 }
 
 function delayedAction(action) {
@@ -19,8 +19,6 @@ function delayedAction(action) {
     }
   }
 }
-
-
 
 export default function (inner) {
   const default_state = {

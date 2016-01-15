@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import _ from 'lodash'
 
 const IF_ODD = 'IF_ODD'
@@ -30,7 +30,7 @@ export default function (inner) {
     },
     view: ({ state, dispatch }) => (
             <span>
-                <inner.View state={state} dispatch={(action) => dispatch(actions.always(action))}/>
+                <inner.view state={state} dispatch={(action) => dispatch(actions.always(action))}/>
                 {' '}
                 <button onClick={() => dispatch(actions.ifOdd(inner.actions.increment()))}>Increment if odd</button>
             </span>

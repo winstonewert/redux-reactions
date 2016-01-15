@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 const INCREMENT = 'INCREMENT'
 const DECREMENT = 'DECREMENT'
@@ -19,7 +19,7 @@ export function reducer(state = 0, action) {
   }
 }
 
-export function View({ state, dispatch }) {
+export function view({ state, dispatch }) {
   return (<span>
         Clicked: {state} times
         {' '}
@@ -29,4 +29,4 @@ export function View({ state, dispatch }) {
     </span>)
 }
 
-export default { actions, reducer, View }
+export default { actions, reducer, view }
