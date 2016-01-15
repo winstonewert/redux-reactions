@@ -11,22 +11,20 @@ const actions = {
   remove: (index) => ({ type: REMOVE, index })
 }
 
+
+
 export default function (inner) {
+
+  const reducers = {
+     [ITEM]: (state, action) => _.map(state, (old, index) => index == action.index ? inner.reducer(old, action.action) : old),
+     [ADD]: (state, action) => [...state, inner.initial],
+     [REMOVE]: (state, action) => _.filter(state, (_, index) => index != action.index)
+  }
+
   return {
     initial: [inner.initial],
     action: actions,
-    reducer: (state, action) => {
-      switch(action.type) {
-        case ITEM:
-          return _.map(state, (old, index) => index == action.index ? inner.reducer(old, action.action) : old)
-        case ADD:
-          return [ ...state, inner.initial]
-        case REMOVE:
-          return _.filter(state, (_, index) => index != action.index)
-        default:
-          return state
-      }
-    },
+    reducer: (state, action) => reducers[action.type](state, action),
     reactions: (state, dispatch) => _.flatten(_.map(state, (state, index) => inner.reactions(state, (action) => dispatch(actions.item(index, action))))),
     view: ({ state, dispatch }) => (
         <div>
